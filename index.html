@@ -3,186 +3,260 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chemical Runner</title>
+<title>Química Interactiva</title>
 
 <style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Segoe UI',sans-serif;
+}
+
 body{
-    margin:0;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
-    background:#e8f5ff;
+background:#0f172a;
+color:white;
 }
 
-#game{
-    position:relative;
-    width:100vw;
-    height:100vh;
-    background:linear-gradient(#cceeff,#99ddff);
+header{
+background:#1e293b;
+padding:20px;
+text-align:center;
 }
 
-#player{
-    position:absolute;
-    bottom:20px;
-    left:50%;
-    transform:translateX(-50%);
-    width:60px;
-    height:60px;
-    background:#0066cc;
-    border-radius:50%;
-    color:white;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:bold;
+header h1{
+font-size:2.5rem;
 }
 
-.item{
-    position:absolute;
-    width:50px;
-    height:50px;
-    border-radius:10px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-weight:bold;
-    color:white;
+header p{
+color:#94a3b8;
 }
 
-.good{
-    background:green;
+#buscador{
+display:block;
+margin:20px auto;
+width:80%;
+max-width:500px;
+padding:12px;
+font-size:18px;
+border:none;
+border-radius:10px;
 }
 
-.bad{
-    background:red;
+.contenedor{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
+gap:15px;
+padding:30px;
 }
 
-#score{
-    position:absolute;
-    top:10px;
-    left:10px;
-    font-size:24px;
-    font-weight:bold;
+.elemento{
+background:#2563eb;
+padding:20px;
+border-radius:15px;
+text-align:center;
+cursor:pointer;
+transition:.3s;
 }
 
-#gameover{
-    display:none;
-    position:absolute;
-    top:50%;
-    left:50%;
-    transform:translate(-50%,-50%);
-    background:white;
-    padding:20px;
-    border-radius:10px;
-    text-align:center;
+.elemento:hover{
+transform:scale(1.05);
+background:#3b82f6;
+}
+
+.numero{
+font-size:12px;
+opacity:.7;
+}
+
+.simbolo{
+font-size:30px;
+font-weight:bold;
+}
+
+.nombre{
+margin-top:10px;
+}
+
+#info{
+margin:20px;
+padding:20px;
+background:#1e293b;
+border-radius:15px;
+display:none;
+}
+
+footer{
+text-align:center;
+padding:20px;
+color:#94a3b8;
 }
 </style>
 </head>
+
 <body>
 
-<div id="game">
-    <div id="score">Puntos: 0</div>
-    <div id="player">LAB</div>
+<header>
+<h1>🧪 Química Interactiva</h1>
+<p>Proyecto educativo sobre elementos químicos</p>
+</header>
 
-    <div id="gameover">
-        <h2>¡Juego terminado!</h2>
-        <p id="finalScore"></p>
-        <button onclick="location.reload()">Jugar otra vez</button>
-    </div>
-</div>
+<input
+type="text"
+id="buscador"
+placeholder="Buscar elemento..."
+>
+
+<div class="contenedor" id="tabla"></div>
+
+<div id="info"></div>
+
+<footer>
+Proyecto de Química - 2026
+</footer>
 
 <script>
-const player = document.getElementById("player");
-const game = document.getElementById("game");
-const scoreText = document.getElementById("score");
-const gameover = document.getElementById("gameover");
-const finalScore = document.getElementById("finalScore");
 
-let score = 0;
-let playerX = window.innerWidth / 2;
+const elementos = [
 
-const goodElements = ["H","O","Na","Cl","C","N"];
-const badElements = ["Hg","Pb","As","Cd"];
+{
+numero:1,
+simbolo:"H",
+nombre:"Hidrógeno",
+masa:"1.008",
+uso:"Combustible y formación del agua"
+},
 
-document.addEventListener("keydown", e=>{
-    if(e.key==="ArrowLeft"){
-        playerX -= 30;
-    }
-    if(e.key==="ArrowRight"){
-        playerX += 30;
-    }
+{
+numero:6,
+simbolo:"C",
+nombre:"Carbono",
+masa:"12.011",
+uso:"Base de la vida orgánica"
+},
 
-    if(playerX < 0) playerX = 0;
-    if(playerX > window.innerWidth-60)
-        playerX = window.innerWidth-60;
+{
+numero:7,
+simbolo:"N",
+nombre:"Nitrógeno",
+masa:"14.007",
+uso:"Fertilizantes"
+},
 
-    player.style.left = playerX+"px";
-});
+{
+numero:8,
+simbolo:"O",
+nombre:"Oxígeno",
+masa:"15.999",
+uso:"Respiración"
+},
 
-function createItem(){
+{
+numero:11,
+simbolo:"Na",
+nombre:"Sodio",
+masa:"22.990",
+uso:"Sal común"
+},
 
-    const item = document.createElement("div");
+{
+numero:17,
+simbolo:"Cl",
+nombre:"Cloro",
+masa:"35.45",
+uso:"Desinfección del agua"
+},
 
-    const isGood = Math.random() > 0.3;
+{
+numero:26,
+simbolo:"Fe",
+nombre:"Hierro",
+masa:"55.845",
+uso:"Construcción"
+},
 
-    item.classList.add("item");
+{
+numero:29,
+simbolo:"Cu",
+nombre:"Cobre",
+masa:"63.546",
+uso:"Conductores eléctricos"
+},
 
-    if(isGood){
-        item.classList.add("good");
-        item.textContent =
-        goodElements[Math.floor(Math.random()*goodElements.length)];
-    }else{
-        item.classList.add("bad");
-        item.textContent =
-        badElements[Math.floor(Math.random()*badElements.length)];
-    }
+{
+numero:47,
+simbolo:"Ag",
+nombre:"Plata",
+masa:"107.87",
+uso:"Joyería"
+},
 
-    item.style.left =
-    Math.random()*(window.innerWidth-50)+"px";
-
-    item.style.top = "-50px";
-
-    game.appendChild(item);
-
-    let y = -50;
-
-    const fall = setInterval(()=>{
-
-        y += 5;
-        item.style.top = y+"px";
-
-        const itemRect = item.getBoundingClientRect();
-        const playerRect = player.getBoundingClientRect();
-
-        if(
-            itemRect.left < playerRect.right &&
-            itemRect.right > playerRect.left &&
-            itemRect.top < playerRect.bottom &&
-            itemRect.bottom > playerRect.top
-        ){
-
-            if(item.classList.contains("good")){
-                score++;
-                scoreText.textContent =
-                "Puntos: " + score;
-            }else{
-                finalScore.textContent =
-                "Tu puntaje fue: " + score;
-                gameover.style.display="block";
-            }
-
-            clearInterval(fall);
-            item.remove();
-        }
-
-        if(y > window.innerHeight){
-            clearInterval(fall);
-            item.remove();
-        }
-
-    },20);
+{
+numero:79,
+simbolo:"Au",
+nombre:"Oro",
+masa:"196.97",
+uso:"Electrónica y joyería"
 }
 
-setInterval(createItem,1000);
+];
+
+const tabla=document.getElementById("tabla");
+const info=document.getElementById("info");
+
+function mostrar(lista){
+
+tabla.innerHTML="";
+
+lista.forEach(el=>{
+
+const div=document.createElement("div");
+
+div.className="elemento";
+
+div.innerHTML=`
+<div class="numero">${el.numero}</div>
+<div class="simbolo">${el.simbolo}</div>
+<div class="nombre">${el.nombre}</div>
+`;
+
+div.onclick=()=>{
+
+info.style.display="block";
+
+info.innerHTML=`
+<h2>${el.nombre} (${el.simbolo})</h2>
+<p><strong>Número atómico:</strong> ${el.numero}</p>
+<p><strong>Masa atómica:</strong> ${el.masa}</p>
+<p><strong>Uso principal:</strong> ${el.uso}</p>
+`;
+
+};
+
+tabla.appendChild(div);
+
+});
+
+}
+
+mostrar(elementos);
+
+document.getElementById("buscador")
+.addEventListener("input",e=>{
+
+const texto=e.target.value.toLowerCase();
+
+const filtrado=elementos.filter(x=>
+
+x.nombre.toLowerCase().includes(texto) ||
+x.simbolo.toLowerCase().includes(texto)
+
+);
+
+mostrar(filtrado);
+
+});
+
 </script>
 
 </body>
