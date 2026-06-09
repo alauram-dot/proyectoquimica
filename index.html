@@ -3,261 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Química Interactiva</title>
-
-<style>
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:'Segoe UI',sans-serif;
-}
-
-body{
-background:#0f172a;
-color:white;
-}
-
-header{
-background:#1e293b;
-padding:20px;
-text-align:center;
-}
-
-header h1{
-font-size:2.5rem;
-}
-
-header p{
-color:#94a3b8;
-}
-
-#buscador{
-display:block;
-margin:20px auto;
-width:80%;
-max-width:500px;
-padding:12px;
-font-size:18px;
-border:none;
-border-radius:10px;
-}
-
-.contenedor{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(120px,1fr));
-gap:15px;
-padding:30px;
-}
-
-.elemento{
-background:#2563eb;
-padding:20px;
-border-radius:15px;
-text-align:center;
-cursor:pointer;
-transition:.3s;
-}
-
-.elemento:hover{
-transform:scale(1.05);
-background:#3b82f6;
-}
-
-.numero{
-font-size:12px;
-opacity:.7;
-}
-
-.simbolo{
-font-size:30px;
-font-weight:bold;
-}
-
-.nombre{
-margin-top:10px;
-}
-
-#info{
-margin:20px;
-padding:20px;
-background:#1e293b;
-border-radius:15px;
-display:none;
-}
-
-footer{
-text-align:center;
-padding:20px;
-color:#94a3b8;
-}
-</style>
+<title>Química Pro</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
 <header>
-<h1>🧪 Química Interactiva</h1>
-<p>Proyecto educativo sobre elementos químicos</p>
+    <h1>🧪 Química Pro</h1>
+    <p>Plataforma Educativa Interactiva</p>
 </header>
 
-<input
-type="text"
-id="buscador"
-placeholder="Buscar elemento..."
->
+<nav>
+    <a href="#inicio">Inicio</a>
+    <a href="#tabla">Elementos</a>
+    <a href="#quiz">Quiz</a>
+</nav>
 
-<div class="contenedor" id="tabla"></div>
+<section id="inicio" class="hero">
+    <h2>Explora el Mundo de la Química</h2>
+    <p>Aprende elementos, responde preguntas y mejora tus conocimientos.</p>
+</section>
 
-<div id="info"></div>
+<section id="tabla">
+    <h2>Elementos Químicos</h2>
+    <input type="text" id="buscador" placeholder="Buscar elemento...">
+    <div id="elementos"></div>
+</section>
+
+<section id="quiz">
+    <h2>Quiz de Química</h2>
+    <div id="pregunta"></div>
+    <div id="opciones"></div>
+    <p id="resultado"></p>
+</section>
 
 <footer>
-Proyecto de Química - 2026
+    Proyecto Profesional de Química © 2026
 </footer>
 
-<script>
-
-const elementos = [
-
-{
-numero:1,
-simbolo:"H",
-nombre:"Hidrógeno",
-masa:"1.008",
-uso:"Combustible y formación del agua"
-},
-
-{
-numero:6,
-simbolo:"C",
-nombre:"Carbono",
-masa:"12.011",
-uso:"Base de la vida orgánica"
-},
-
-{
-numero:7,
-simbolo:"N",
-nombre:"Nitrógeno",
-masa:"14.007",
-uso:"Fertilizantes"
-},
-
-{
-numero:8,
-simbolo:"O",
-nombre:"Oxígeno",
-masa:"15.999",
-uso:"Respiración"
-},
-
-{
-numero:11,
-simbolo:"Na",
-nombre:"Sodio",
-masa:"22.990",
-uso:"Sal común"
-},
-
-{
-numero:17,
-simbolo:"Cl",
-nombre:"Cloro",
-masa:"35.45",
-uso:"Desinfección del agua"
-},
-
-{
-numero:26,
-simbolo:"Fe",
-nombre:"Hierro",
-masa:"55.845",
-uso:"Construcción"
-},
-
-{
-numero:29,
-simbolo:"Cu",
-nombre:"Cobre",
-masa:"63.546",
-uso:"Conductores eléctricos"
-},
-
-{
-numero:47,
-simbolo:"Ag",
-nombre:"Plata",
-masa:"107.87",
-uso:"Joyería"
-},
-
-{
-numero:79,
-simbolo:"Au",
-nombre:"Oro",
-masa:"196.97",
-uso:"Electrónica y joyería"
-}
-
-];
-
-const tabla=document.getElementById("tabla");
-const info=document.getElementById("info");
-
-function mostrar(lista){
-
-tabla.innerHTML="";
-
-lista.forEach(el=>{
-
-const div=document.createElement("div");
-
-div.className="elemento";
-
-div.innerHTML=`
-<div class="numero">${el.numero}</div>
-<div class="simbolo">${el.simbolo}</div>
-<div class="nombre">${el.nombre}</div>
-`;
-
-div.onclick=()=>{
-
-info.style.display="block";
-
-info.innerHTML=`
-<h2>${el.nombre} (${el.simbolo})</h2>
-<p><strong>Número atómico:</strong> ${el.numero}</p>
-<p><strong>Masa atómica:</strong> ${el.masa}</p>
-<p><strong>Uso principal:</strong> ${el.uso}</p>
-`;
-
-};
-
-tabla.appendChild(div);
-
-});
-
-}
-
-mostrar(elementos);
-
-document.getElementById("buscador")
-.addEventListener("input",e=>{
-
-const texto=e.target.value.toLowerCase();
-
-const filtrado=elementos.filter(x=>
-
-x.nombre.toLowerCase().includes(texto) ||
-x.simbolo.toLowerCase().includes(texto)
-
-);
-
-mostrar(filtrado);
-
-});
-
-</script>
-
+<script src="script.js"></script>
 </body>
 </html>
