@@ -1,91 +1,75 @@
-const elementos = [
-{simbolo:"H",nombre:"Hidrógeno"},
-{simbolo:"He",nombre:"Helio"},
-{simbolo:"Li",nombre:"Litio"},
-{simbolo:"C",nombre:"Carbono"},
-{simbolo:"N",nombre:"Nitrógeno"},
-{simbolo:"O",nombre:"Oxígeno"},
-{simbolo:"Na",nombre:"Sodio"},
-{simbolo:"Cl",nombre:"Cloro"},
-{simbolo:"Fe",nombre:"Hierro"},
-{simbolo:"Au",nombre:"Oro"}
-];
-
-const contenedor = document.getElementById("elementos");
-
-function mostrarElementos(lista){
-contenedor.innerHTML = "";
-
-lista.forEach(e=>{
-const card=document.createElement("div");
-card.className="card";
-card.innerHTML=`
-<h3>${e.simbolo}</h3>
-<p>${e.nombre}</p>
-`;
-contenedor.appendChild(card);
-});
+body{
+margin:0;
+display:flex;
+font-family:Segoe UI;
+background:#0a0f0a;
+color:white;
 }
 
-mostrarElementos(elementos);
-
-document.getElementById("buscador")
-.addEventListener("input",e=>{
-const texto=e.target.value.toLowerCase();
-
-const filtrados=elementos.filter(el=>
-el.nombre.toLowerCase().includes(texto) ||
-el.simbolo.toLowerCase().includes(texto)
-);
-
-mostrarElementos(filtrados);
-});
-
-const preguntas = [
-{
-pregunta:"¿Cuál es el símbolo del Oxígeno?",
-opciones:["Ox","O","Og"],
-correcta:"O"
-},
-{
-pregunta:"¿Cuál es el elemento Au?",
-opciones:["Plata","Oro","Hierro"],
-correcta:"Oro"
-}
-];
-
-let actual=0;
-
-function cargarPregunta(){
-document.getElementById("pregunta").innerText =
-preguntas[actual].pregunta;
-
-const opciones =
-document.getElementById("opciones");
-
-opciones.innerHTML="";
-
-preguntas[actual].opciones.forEach(op=>{
-
-const btn=document.createElement("button");
-btn.innerText=op;
-
-btn.onclick=()=>{
-
-document.getElementById("resultado").innerText =
-op===preguntas[actual].correcta ?
-"✅ Correcto" :
-"❌ Incorrecto";
-
-actual++;
-
-if(actual<preguntas.length){
-setTimeout(cargarPregunta,1000);
-}
-};
-
-opciones.appendChild(btn);
-});
+.sidebar{
+width:250px;
+height:100vh;
+background:#1b2b1b;
+padding:20px;
+position:fixed;
 }
 
-cargarPregunta();
+.sidebar ul{
+list-style:none;
+padding:0;
+}
+
+.sidebar li{
+padding:12px;
+margin:10px 0;
+background:#263826;
+border-radius:8px;
+cursor:pointer;
+}
+
+.main{
+margin-left:270px;
+padding:20px;
+width:100%;
+}
+
+.stats{
+display:flex;
+gap:20px;
+}
+
+.card{
+background:#1f3320;
+padding:20px;
+border-radius:12px;
+width:180px;
+}
+
+#buscador{
+width:100%;
+padding:12px;
+margin:20px 0;
+font-size:16px;
+border:none;
+border-radius:8px;
+}
+
+#tabla{
+display:grid;
+grid-template-columns:
+repeat(auto-fill,minmax(120px,1fr));
+gap:15px;
+}
+
+.elemento{
+background:#355735;
+padding:15px;
+border-radius:10px;
+cursor:pointer;
+transition:.3s;
+}
+
+.elemento:hover{
+transform:scale(1.05);
+background:#4b754b;
+}
