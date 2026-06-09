@@ -1,1 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chemical Runner</title>
 
+<style>
+body{
+    margin:0;
+    overflow:hidden;
+    font-family:Arial,sans-serif;
+    background:#e8f5ff;
+}
+
+#game{
+    position:relative;
+    width:100vw;
+    height:100vh;
+    background:linear-gradient(#cceeff,#99ddff);
+}
+
+#player{
+    position:absolute;
+    bottom:20px;
+    left:50%;
+    transform:translateX(-50%);
+    width:60px;
+    height:60px;
+    background:#0066cc;
+    border-radius:50%;
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+}
+
+.item{
+    position:absolute;
+    width:50px;
+    height:50px;
+    border-radius:10px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-weight:bold;
+    color:white;
+}
+
+.good{
+    background:green;
+}
+
+.bad{
+    background:red;
+}
+
+#score{
+    position:absolute;
+    top:10px;
+    left:10px;
+    font-size:24px;
+    font-weight:bold;
+}
+
+#gameover{
+    display:none;
+    position:absolute;
+    top:50%;
+    left:50%;
+    transform:translate(-50%,-50%);
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    text-align:center;
+}
+</style>
+</head>
+<body>
+
+<div id="game">
+    <div id="score">Puntos: 0</div>
+    <div id="player">LAB</div>
+
+    <div id="gameover">
+        <h2>¡Juego terminado!</h2>
+        <p id="finalScore"></p>
+        <button onclick="location.reload()">Jugar otra vez</button>
+    </div>
+</div>
+
+<script>
+const player = document.getElementById("player");
+const game = document.getElementById("game");
+const scoreText = document.getElementById("score");
+const gameover = document.getElementById("gameover");
+const finalScore = document.getElementById("finalScore");
+
+let score = 0;
+let playerX = window.innerWidth / 2;
+
+const goodElements = ["H","O","Na","Cl","C","N"];
+const badElements = ["Hg","Pb","As","Cd"];
+
+document.addEventListener("keydown", e=>{
+    if(e.key==="ArrowLeft"){
+        playerX -= 30;
+    }
+    if(e.key==="ArrowRight"){
+        playerX += 30;
+    }
+
+    if(playerX < 0) playerX = 0;
+    if(playerX > window.innerWidth-60)
+        playerX = window.innerWidth-60;
+
+    player.style.left = playerX+"px";
+});
+
+function createItem(){
+
+    const item = document.createElement("div");
+
+    const isGood = Math.random() > 0.3;
+
+    item.classList.add("item");
+
+    if(isGood){
+        item.classList.add("good");
+        item.textContent =
+        goodElements[Math.floor(Math.random()*goodElements.length)];
+    }else{
+        item.classList.add("bad");
+        item.textContent =
+        badElements[Math.floor(Math.random()*badElements.length)];
+    }
+
+    item.style.left =
+    Math.random()*(window.innerWidth-50)+"px";
+
+    item.style.top = "-50px";
+
+    game.appendChild(item);
+
+    let y = -50;
+
+    const fall = setInterval(()=>{
+
+        y += 5;
+        item.style.top = y+"px";
+
+        const itemRect = item.getBoundingClientRect();
+        const playerRect = player.getBoundingClientRect();
+
+        if(
+            itemRect.left < playerRect.right &&
+            itemRect.right > playerRect.left &&
+            itemRect.top < playerRect.bottom &&
+            itemRect.bottom > playerRect.top
+        ){
+
+            if(item.classList.contains("good")){
+                score++;
+                scoreText.textContent =
+                "Puntos: " + score;
+            }else{
+                finalScore.textContent =
+                "Tu puntaje fue: " + score;
+                gameover.style.display="block";
+            }
+
+            clearInterval(fall);
+            item.remove();
+        }
+
+        if(y > window.innerHeight){
+            clearInterval(fall);
+            item.remove();
+        }
+
+    },20);
+}
+
+setInterval(createItem,1000);
+</script>
+
+</body>
+</html>
