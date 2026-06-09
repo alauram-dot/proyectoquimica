@@ -3,72 +3,126 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ChemLab Military Edition</title>
+
+<title>Toxic Snake Chemistry Pro</title>
+
 <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<div class="sidebar">
+<div id="startScreen">
 
-<h2>🧪 ChemLab</h2>
+    <h1>🧪 TOXIC SNAKE CHEMISTRY PRO</h1>
 
-<ul>
-<li>🏠 Inicio</li>
-<li>⚛ Tabla Periódica</li>
-<li>🧪 Laboratorio</li>
-<li>🎯 Quiz</li>
-<li>🏆 Ranking</li>
-<li>📊 Estadísticas</li>
-</ul>
+    <p class="subtitle">
+        Aprende química mientras sobrevives a sustancias peligrosas.
+    </p>
 
-</div>
+    <input
+        type="text"
+        id="playerName"
+        placeholder="Ingresa tu nombre"
+        maxlength="20"
+    >
 
-<div class="main">
-
-<header>
-
-<h1>Centro de Estudios Químicos</h1>
-
-<div class="stats">
-
-<div class="card">
-<h3>Puntos</h3>
-<p id="puntos">0</p>
-</div>
-
-<div class="card">
-<h3>Rango</h3>
-<p id="rango">Cadete</p>
-</div>
-
-<div class="card">
-<h3>Elementos</h3>
-<p>118</p>
-</div>
+    <button id="startBtn">
+        ▶ Iniciar Juego
+    </button>
 
 </div>
 
-</header>
+<div id="ui">
 
-<section>
+    <div class="panel">
 
-<h2>Tabla Periódica</h2>
+        <h2>Estado</h2>
 
-<input
-type="text"
-id="buscador"
-placeholder="Buscar elemento..."
->
+        <p>👤 Jugador:
+            <span id="playerDisplay">
+                Invitado
+            </span>
+        </p>
 
-<div id="tabla"></div>
+        <p>🏆 Puntaje:
+            <span id="score">
+                0
+            </span>
+        </p>
 
-</section>
+        <p>⭐ Nivel:
+            <span id="level">
+                1
+            </span>
+        </p>
+
+        <p>❤️ Vida:
+            <span id="health">
+                100
+            </span>%
+        </p>
+
+        <p>🧪 Descubiertos:
+            <span id="discoveries">
+                0
+            </span>
+        </p>
+
+        <p>⚡ Poder:
+            <span id="powerStatus">
+                Ninguno
+            </span>
+        </p>
+
+        <div id="message">
+            Bienvenido al laboratorio.
+        </div>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>Controles</h2>
+
+        <p>⬆ W / ↑</p>
+        <p>⬇ S / ↓</p>
+        <p>⬅ A / ←</p>
+        <p>➡ D / →</p>
+
+    </div>
+
+    <div class="panel">
+
+        <h2>Elementos descubiertos</h2>
+
+        <ul id="collectionList">
+
+        </ul>
+
+    </div>
 
 </div>
 
-<script src="elementos.js"></script>
-<script src="script.js"></script>
+<canvas
+id="gameCanvas"
+width="900"
+height="600">
+</canvas>
+
+<div id="gameOver">
+
+    <h2>☣ GAME OVER</h2>
+
+    <p id="gameOverText">
+
+    </p>
+
+    <button onclick="restartGame()">
+        Jugar de nuevo
+    </button>
+
+</div>
+
+<script src="game.js"></script>
 
 </body>
 </html>
